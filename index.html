@@ -199,42 +199,34 @@
 </div>
 
 
-<h2>1. Cần những gì</h2>
+<h2>1. Phần cứng</h2>
 
 <table>
-  <tr><th>Món</th><th>Ghi chú</th></tr>
-  <tr>
-    <td><b>ESP32-C3 SuperMini</b></td>
-    <td>flash <b>4 MB</b> —
-      <a href="https://shopee.vn/Samirob-ESP32-C3-ESP32-S3-ESP32-H2-ESP32-C6-Ban-Ph%C3%A1t-Tri%E1%BB%83n-ESP32-C3-SuperMini-WiFi-Bluetooth-ESP32C3-B%E1%BA%A3ng-M%E1%BB%9F-R%E1%BB%99ng-i.578443443.24400570619?extraParams=%7B%22display_model_id%22%3A168039065133%2C%22model_selection_logic%22%3A3%7D"
-         target="_blank" rel="noopener">mua trên Shopee</a><br>
-      <span style="color:var(--muted);font-size:.86rem">
-        Gian hàng này bán nhiều dòng (C3 / S3 / H2 / C6) — phải chọn đúng
-        <b>ESP32-C3 SuperMini</b>. Bản S3, C6 hay H2 <b>không chạy được</b>
-        firmware này.
-      </span></td>
-  </tr>
-  <tr><td><b>2 nút nhấn</b></td><td>loại 2 chân bất kỳ — một NẠP, một XOÁ</td></tr>
-  <tr><td><b>Màn OLED 128×32</b></td><td>SSD1306 giao tiếp I2C, địa chỉ 0x3C —
-      <em>tuỳ chọn, không có máy vẫn chạy</em></td></tr>
-  <tr><td><b>2 LED + trở 330 Ω</b></td><td>báo trạng thái và kết quả, nhìn được từ xa</td></tr>
-  <tr><td><b>Dây nối</b></td><td>3 dây sang target: SWDIO, SWCLK, GND</td></tr>
+  <tr><th>Món</th><th>Yêu cầu</th></tr>
+  <tr><td><b>ESP32-C3 SuperMini</b></td>
+      <td>flash <b>4 MB</b> — <a href="https://shopee.vn/Samirob-ESP32-C3-ESP32-S3-ESP32-H2-ESP32-C6-Ban-Ph%C3%A1t-Tri%E1%BB%83n-ESP32-C3-SuperMini-WiFi-Bluetooth-ESP32C3-B%E1%BA%A3ng-M%E1%BB%9F-R%E1%BB%99ng-i.578443443.24400570619?extraParams=%7B%22display_model_id%22%3A168039065133%2C%22model_selection_logic%22%3A3%7D" target="_blank" rel="noopener">mua trên Shopee</a><br>
+      <span style="color:var(--muted);font-size:.86rem">Gian hàng bán nhiều dòng.
+      Phải đúng <b>C3</b>; S3, C6, H2 không chạy firmware này.</span></td></tr>
+  <tr><td>Nút nhấn × 2</td><td>2 chân, thường hở</td></tr>
+  <tr><td>LED + trở 330 Ω × 2</td><td>trạng thái và kết quả</td></tr>
+  <tr><td>OLED 128×32</td><td>SSD1306, I2C, địa chỉ 0x3C — tuỳ chọn</td></tr>
+  <tr><td>Dây nối</td><td>3 sợi sang target: SWDIO, SWCLK, GND</td></tr>
 </table>
 
 
-<h2>2. Đấu dây</h2>
+<h2>2. Sơ đồ chân</h2>
 
 <table>
-  <tr><th>Chân ESP32-C3</th><th>Nối tới</th></tr>
-  <tr><td class="pin">GPIO 0</td><td><b>SWDIO</b> của STM32</td></tr>
-  <tr><td class="pin">GPIO 2</td><td><b>SWCLK</b> của STM32</td></tr>
-  <tr><td class="pin">GND</td><td><b>GND</b> của STM32 — bắt buộc</td></tr>
-  <tr><td class="pin">GPIO 4</td><td>nút <b>NẠP</b> → GND</td></tr>
-  <tr><td class="pin">GPIO 7</td><td>nút <b>XOÁ</b> → GND</td></tr>
-  <tr><td class="pin">GPIO 8</td><td><b>SDA</b> của màn OLED</td></tr>
-  <tr><td class="pin">GPIO 9</td><td><b>SCL</b> của màn OLED</td></tr>
-  <tr><td class="pin">GPIO 5</td><td>trở 330 Ω → LED → GND <em>(đèn trạng thái)</em></td></tr>
-  <tr><td class="pin">GPIO 10</td><td>trở 330 Ω → LED → GND <em>(đèn kết quả)</em></td></tr>
+  <tr><th>Chân</th><th>Chức năng</th></tr>
+  <tr><td class="pin">GPIO 0</td><td>SWDIO → target</td></tr>
+  <tr><td class="pin">GPIO 2</td><td>SWCLK → target</td></tr>
+  <tr><td class="pin">GND</td><td>GND → target (bắt buộc)</td></tr>
+  <tr><td class="pin">GPIO 4</td><td>nút NẠP → GND</td></tr>
+  <tr><td class="pin">GPIO 7</td><td>nút XOÁ → GND</td></tr>
+  <tr><td class="pin">GPIO 8</td><td>OLED SDA</td></tr>
+  <tr><td class="pin">GPIO 9</td><td>OLED SCL</td></tr>
+  <tr><td class="pin">GPIO 5</td><td>LED trạng thái, qua trở 330 Ω xuống GND</td></tr>
+  <tr><td class="pin">GPIO 10</td><td>LED kết quả, qua trở 330 Ω xuống GND</td></tr>
 </table>
 
 <pre>   ESP32-C3                        STM32F103
@@ -242,7 +234,7 @@
    │  GPIO 0 ├─────────────────────┤ SWDIO   │
    │  GPIO 2 ├─────────────────────┤ SWCLK   │
    │     GND ├─────────────────────┤ GND     │
-   │         │                     │ 3V3 ────┼── chỉ 3.3 V
+   │         │                     │ 3V3 ────┼── 3.3 V
    │         │                     └─────────┘
    │  GPIO 4 ├──[ nút NẠP ]── GND
    │  GPIO 7 ├──[ nút XOÁ ]── GND
@@ -252,90 +244,80 @@
    │     3V3 ├─────────────────────┤ VCC     │
    │     GND ├─────────────────────┤ GND     │
    │         │
-   │  GPIO 5 ├──[330Ω]──▶|── GND   đèn trạng thái
-   │  GPIO 10├──[330Ω]──▶|── GND   đèn kết quả
+   │  GPIO 5 ├──[330Ω]──▶|── GND
+   │  GPIO 10├──[330Ω]──▶|── GND
    └─────────┘</pre>
 
-<div class="note">
-  <b>GPIO 8 và 9 nhìn thì thấy sai nhưng đúng.</b> Đây là hai chân “strapping” —
-  ESP32-C3 bắt chúng phải ở mức cao lúc khởi động. Module OLED nào cũng có sẵn
-  điện trở kéo lên trên I2C, nên bus giữ đúng mức cần. Chỉ cần <b>đừng để hai
-  dây này chạm mát</b> lúc cấp nguồn, vì đó là điều kiện đưa chip vào chế độ nạp
-  và máy sẽ lên tối thui không báo gì.
-</div>
-
-<div class="note">
-  <b>Không gắn màn cũng chạy bình thường.</b> Lúc khởi động máy tìm màn ở địa chỉ
-  0x3C, không thấy thì chạy tiếp không màn. Hai bóng đèn vẫn nói đủ kết quả.
-</div>
+<table>
+  <tr><th>Thông số</th><th></th></tr>
+  <tr><td>Nguồn target</td><td>3.3 V. Không dùng 5 V.</td></tr>
+  <tr><td>nRESET</td><td>không đấu — dùng nút reset trên board target</td></tr>
+  <tr><td>Giao tiếp OLED</td><td>I2C 400 kHz, 0x3C</td></tr>
+  <tr><td>Khử rung nút</td><td>40 ms</td></tr>
+  <tr><td>Thời gian nạp</td><td>≈ 6,5 s cho ảnh 38 KB</td></tr>
+</table>
 
 <div class="note bad">
-  <b>Chỉ cấp 3.3 V cho STM32.</b> 5 V làm lệch mức logic SWD và có thể hỏng chân
-  của ESP32-C3.
+  <b>3.3 V.</b> 5 V làm lệch mức logic SWD, có thể hỏng chân ESP32-C3.
 </div>
 
 <div class="note">
-  <b>Quên dây GND là lỗi hay gặp nhất.</b> SWD không có đường về, máy sẽ báo
-  <code>No target responding</code> — nhìn y hệt như target đã chết.
+  <b>GPIO 8 và 9 là chân strapping.</b> ESP32-C3 cần chúng ở mức cao lúc khởi
+  động; điện trở kéo lên sẵn trên module OLED giữ đúng mức đó. Không để hai dây
+  này chạm mát lúc cấp nguồn.
+</div>
+
+<div class="note">
+  <b>Không gắn OLED vẫn chạy.</b> Khởi động không thấy 0x3C thì máy bỏ qua màn.
+  Thiếu GND sang target thì báo <code>No target responding</code>.
 </div>
 
 
-<h2>3. Đèn báo gì</h2>
+<h2>3. Đèn</h2>
 
-<p>Sáu trạng thái, phân biệt bằng <b>kiểu nháy</b> chứ không bằng tốc độ — nên
-không phải ngồi đếm. Nhịp dưới đây chạy đúng tốc độ thật, đưa trang này cạnh máy
-là so được ngay.</p>
+<p><b>LED trạng thái — GPIO 5.</b> Sáu trạng thái, phân biệt bằng hình dạng nhịp
+chứ không bằng tốc độ. Nhịp dưới đây chạy đúng tốc độ thật của máy.</p>
 
 <div class="card leds">
   <div class="led-row">
     <div class="lamp p-none"></div>
     <div class="led-desc"><b>Chưa có firmware</b>
-      <span>Nháy đều, chậm — máy trống, nạp firmware vào bằng phần mềm trên PC</span></div>
+      <span>Nháy đều 1 Hz</span></div>
   </div>
   <div class="led-row">
     <div class="lamp on"></div>
     <div class="led-desc"><b>Sẵn sàng</b>
-      <span>Sáng liên tục — đã có firmware, đang chờ bấm nút</span></div>
+      <span>Sáng liên tục</span></div>
   </div>
   <div class="led-row">
     <div class="lamp p-busy"></div>
     <div class="led-desc"><b>Đang nạp</b>
-      <span>Chớp rất nhanh — đừng nhả que đo lúc này</span></div>
+      <span>Chớp 10 Hz</span></div>
   </div>
   <div class="led-row">
     <div class="lamp p-pass"></div>
-    <div class="led-desc"><b>Nạp xong, đạt</b>
-      <span>Nhịp tim: hai nhịp rồi nghỉ dài</span></div>
+    <div class="led-desc"><b>Đạt</b>
+      <span>Nhịp tim — hai nhịp rồi nghỉ</span></div>
   </div>
   <div class="led-row">
     <div class="lamp p-fail"></div>
-    <div class="led-desc"><b>Nạp hỏng</b>
-      <span>SOS — thử lại: kẹp lại que đo, kiểm nguồn 3.3 V</span></div>
+    <div class="led-desc"><b>Hỏng</b>
+      <span>SOS — thử lại</span></div>
   </div>
   <div class="led-row">
     <div class="lamp p-locked"></div>
-    <div class="led-desc"><b>Chip bị khoá</b>
-      <span>Hải đăng: dài rồi ngắn — chip khoá vĩnh viễn, không nạp được, bỏ qua con đó</span></div>
+    <div class="led-desc"><b>Chip khoá vĩnh viễn</b>
+      <span>Hải đăng — RDP mức 2, bỏ con đó</span></div>
   </div>
 </div>
 
-<p><b>Nạp hỏng</b> và <b>chip bị khoá</b> cố ý khác nhau về hình dạng vì chúng
-bảo bạn làm hai việc ngược nhau: SOS là <em>thử lại</em>, hải đăng là
-<em>dừng, con này bỏ</em>.</p>
-
-<h3>Đèn thứ hai (GPIO 10)</h3>
-<p>Nếu có đấu, nó chỉ trả lời một câu và nhìn được từ xa hơn:
-<b>sáng liên tục</b> = lần nạp vừa rồi đạt · <b>chớp</b> = hỏng ·
-<b>tắt</b> = chưa có kết quả hoặc đang nạp.</p>
+<p><b>LED kết quả — GPIO 10.</b>
+sáng liên tục = đạt · chớp = hỏng · tắt = chưa có kết quả hoặc đang nạp.</p>
 
 
-<h2>4. Màn hình nói gì</h2>
+<h2>4. Màn hình</h2>
 
-<p>Cấp nguồn xong máy chạy màn khởi động rồi kéo thanh qua các bước, chưa tới hai
-giây. Dừng lại ở bước nào tức là hỏng ở bước đó.</p>
-
-<p>Sau đó mọi màn đều chung một khung: <b>dòng nhỏ ở trên là bối cảnh, chữ to ở
-dưới là trạng thái</b>. Chữ to đọc được từ xa khi hai tay đang bận.</p>
+<p>Khung cố định: dòng nhỏ trên là bối cảnh, chữ to dưới là trạng thái.</p>
 
 <pre>   Lúc rảnh              Đang nạp
    ┌────────────────────┐┌────────────────────┐
@@ -351,86 +333,77 @@ dưới là trạng thái</b>. Chữ to đọc được từ xa khi hai tay đan
    │      PASS          ││      FAIL          │
    └────────────────────┘└────────────────────┘</pre>
 
-<p>Dòng trên cho biết firmware máy đang mang: dung lượng và 6 ký tự đầu của mã
-md5. Dung lượng bắt lỗi <em>nhầm ảnh</em>, mấy chữ số bắt lỗi <em>đúng ảnh nhưng
-bản cũ</em>.</p>
+<table>
+  <tr><th>Thành phần</th><th>Nội dung</th></tr>
+  <tr><td>Chữ to</td><td><code>READY</code> · <code>EMPTY</code> ·
+      <code>PASS</code> · <code>FAIL</code> · phần trăm khi đang nạp</td></tr>
+  <tr><td>Dòng trên, lúc rảnh</td><td>dung lượng ảnh + 6 ký tự đầu của md5</td></tr>
+  <tr><td>Dòng trên, khi hỏng</td><td>mã lỗi</td></tr>
+  <tr><td><code>LOCK</code></td><td>máy đang bật khoá chống đọc cho target</td></tr>
+  <tr><td>Khởi động</td><td>logo rồi thanh chạy qua các bước, dưới 2 s</td></tr>
+</table>
 
-<p>Chữ <code>LOCK</code> góc phải chỉ hiện khi máy đang bật chế độ khoá chống đọc
-ngược cho chip — xem mục dưới.</p>
 
-
-<h2>5. Dùng hằng ngày</h2>
+<h2>5. Vận hành</h2>
 
 <ol class="steps">
-  <li>Kẹp <b>SWDIO, SWCLK, GND</b> vào board STM32. Cấp cho nó 3.3 V.</li>
-  <li>Bấm nút <b>NẠP</b>.</li>
-  <li>Đèn chớp nhanh ngay, màn hiện thanh tiến trình. Bảy giây sau đèn chuyển
-      sang <b>nhịp tim</b> (đạt) hoặc <b>SOS</b> (hỏng), màn hiện
-      <b>PASS</b> hoặc <b>FAIL</b>.</li>
-  <li>Nhả ra, kẹp con kế tiếp, bấm tiếp.</li>
+  <li>Kẹp SWDIO, SWCLK, GND vào target. Cấp 3.3 V cho target.</li>
+  <li>Bấm nút <b>NẠP</b> (GPIO 4).</li>
+  <li>Chờ ≈ 7 s. Đèn chuyển sang nhịp tim hoặc SOS; màn hiện PASS hoặc FAIL.</li>
+  <li>Nhả ra, kẹp con kế tiếp.</li>
 </ol>
 
-<p>Kết quả nằm lại trên màn và trên đèn cho tới lần bấm sau, nên ngó đi chỗ khác
-rồi quay lại vẫn đọc được.</p>
+<p>Kết quả giữ trên màn và trên đèn cho tới lần bấm sau.</p>
 
-<div class="note">
-  <b>Muốn xoá trắng một con:</b> bấm nút <b>XOÁ</b> (GPIO 7). Đây là nút riêng,
-  không phải thao tác trên nút NẠP — nên không có chuyện bấm nhầm nhịp mà mất
-  chip.
-</div>
+<p><b>Xoá trắng target:</b> bấm nút <b>XOÁ</b> (GPIO 7).</p>
 
 <div class="note bad">
-  <b>Nếu máy đang bật khoá chống đọc (màn hiện <code>LOCK</code>):</b> nạp xong
-  báo <b>PASS</b> thì phải <b>rút điện của board STM32 rồi cấp lại</b> nó mới
-  chạy firmware mới. <b>Nhấn nút reset không ăn</b> — đây là đặc tính của chính
-  con STM32F1 khi bật khoá, không phải máy hỏng. Kẹp ra kẹp con kế thì tự nhiên
-  đã mất điện nên không gặp.
+  <b>Khi máy hiện <code>LOCK</code>:</b> nạp xong báo PASS thì phải rút điện
+  target rồi cấp lại, board mới chạy firmware mới. Nhấn reset không có tác dụng.
+  Đây là đặc tính của STM32F1 khi bật khoá đọc, không phải lỗi. Gỡ target ra khỏi
+  kẹp là đã mất điện nên thường không gặp.
 </div>
 
 
-<h2>6. Đổi firmware mà máy mang</h2>
+<h2>6. Đổi firmware máy đang mang</h2>
 
-<p>Máy nhớ đúng <b>một</b> firmware. Muốn đổi thì cắm máy vào máy tính và dùng
-phần mềm <b>FlashPorter</b> (file <code>F1Flash.exe</code>, chạy luôn, không cần
-cài):</p>
+<p>Máy nhớ đúng một firmware. Đổi bằng phần mềm <b>FlashPorter</b>
+(<code>F1Flash.exe</code>, chạy trực tiếp, không cần cài).</p>
 
 <ol class="steps">
-  <li>Mở phần mềm, chọn cổng COM — máy hiện ra tên <em>USB Serial Device</em>.</li>
-  <li><b>Run Self-Test</b> nếu là máy mới: kiểm tra bộ nhớ có giữ đúng dữ liệu không.</li>
-  <li>Chọn file <code>.bin</code> của STM32 rồi bấm <b>Upload</b>.</li>
-  <li>Rút ra, mang đi dùng.</li>
+  <li>Cắm máy vào PC, mở phần mềm, chọn cổng COM (<em>USB Serial Device</em>).</li>
+  <li>Máy mới: bấm <b>Run Self-Test</b> để kiểm bộ nhớ.</li>
+  <li>Chọn file <code>.bin</code> của STM32, bấm <b>Upload</b>.</li>
+  <li>Rút ra.</li>
 </ol>
 
-<p>Phần mềm tự kiểm MD5 và từ chối ảnh sai, nên không có chuyện nạp nhầm một file
-hỏng vào hàng loạt board.</p>
+<p>Phần mềm kiểm md5 và từ chối ảnh sai.</p>
 
 
-<h2>7. Trục trặc thường gặp</h2>
+<h2>7. Trục trặc</h2>
 
 <table>
   <tr><th>Hiện tượng</th><th>Nguyên nhân</th></tr>
   <tr><td><code>No target responding</code></td>
-      <td>chưa nối GND, hoặc đấu nhầm SWCLK sang chân khác GPIO 2</td></tr>
+      <td>thiếu GND, hoặc SWCLK không ở GPIO 2</td></tr>
   <tr><td><code>Wrong chip</code></td>
-      <td>không phải STM32F1 — máy này chỉ nạp dòng đó</td></tr>
+      <td>không phải STM32F1</td></tr>
   <tr><td>Đèn hải đăng</td>
-      <td>chip khoá RDP mức 2, không công cụ nào nạp lại được</td></tr>
+      <td>target khoá RDP mức 2 — không tool nào nạp lại được</td></tr>
   <tr><td>Đèn nháy chậm mãi</td>
-      <td>máy chưa có firmware — nạp vào bằng phần mềm trên PC</td></tr>
-  <tr><td>Nút bấm không ăn</td>
-      <td>nút phải nối <b>xuống GND</b>, không nối lên 3V3 — NẠP ở GPIO 4,
-          XOÁ ở GPIO 7</td></tr>
-  <tr><td><b>Máy báo PASS mà board STM32 nằm im</b></td>
-      <td>máy đang bật khoá chống đọc (màn hiện <code>LOCK</code>). Rút điện
-          board rồi cấp lại — nhấn reset không ăn. Board không hỏng.</td></tr>
-  <tr><td>Màn OLED không sáng</td>
-      <td>sai địa chỉ (phải là <b>0x3C</b>), hoặc đấu nhầm SDA/SCL. Máy vẫn nạp
-          bình thường, chỉ mất màn.</td></tr>
-  <tr><td>Cấp nguồn mà máy lên tối thui</td>
-      <td>SDA hoặc SCL bị chạm mát lúc khởi động — GPIO 9 chạm mát đưa chip vào
-          chế độ nạp</td></tr>
+      <td>máy chưa có firmware</td></tr>
+  <tr><td>Nút không ăn</td>
+      <td>nút phải nối xuống GND, không nối lên 3V3</td></tr>
+  <tr><td><b>Báo PASS mà target nằm im</b></td>
+      <td>máy đang bật <code>LOCK</code> — rút điện target rồi cấp lại. Reset
+          không ăn. Target không hỏng.</td></tr>
+  <tr><td>OLED không sáng</td>
+      <td>sai địa chỉ (phải 0x3C) hoặc đảo SDA/SCL. Máy vẫn nạp bình thường.</td></tr>
+  <tr><td>Cấp nguồn, máy không lên</td>
+      <td>SDA hoặc SCL chạm mát lúc khởi động</td></tr>
   <tr><td>Trang này không nạp được</td>
-      <td>phải dùng Chrome hoặc Edge trên máy tính — Firefox, Safari và điện thoại không hỗ trợ WebSerial</td></tr>
+      <td>cần Chrome hoặc Edge trên máy tính — Firefox, Safari và điện thoại
+          không hỗ trợ WebSerial</td></tr>
 </table>
 
 
