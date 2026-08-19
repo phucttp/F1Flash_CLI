@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>F1Flash — Máy nạp STM32F1</title>
+<title>F1Flash — Máy nạp STM32F1 & LKS08x</title>
 <style>
   :root {
     --bg: #f7f7fb; --card: #fff; --text: #24242e; --muted: #6b6b7d;
@@ -62,65 +62,6 @@
     display: grid; place-items: center;
   }
 
-  /* ── Live LED patterns ──────────────────────────────────────────────
-     The rhythms run at the real timings from led_status.cpp, so the page
-     can be held next to the unit and compared directly. Describing a
-     heartbeat in words is exactly what does not work.                   */
-  .leds { display: grid; gap: 2px; }
-  .led-row {
-    display: grid; grid-template-columns: 46px 1fr; gap: 14px;
-    align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--line);
-  }
-  .lamp {
-    width: 20px; height: 20px; border-radius: 50%; justify-self: center;
-    background: #d8d8e4; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
-  }
-  @media (prefers-color-scheme: dark) { .lamp { background: #34343f; } }
-  .lamp.on  { background: var(--ok); box-shadow: 0 0 12px 2px rgba(16,185,129,.55); }
-  .lamp.p-none   { animation: p-none   1000ms steps(1,end) infinite; }
-  .lamp.p-busy   { animation: p-busy    100ms steps(1,end) infinite; }
-  .lamp.p-pass   { animation: p-pass   1350ms steps(1,end) infinite; }
-  .lamp.p-fail   { animation: p-fail   5250ms steps(1,end) infinite; }
-  .lamp.p-locked { animation: p-locked 2000ms steps(1,end) infinite; }
-  @keyframes p-none { 0%,49.9% { background: var(--ok); box-shadow: 0 0 12px 2px rgba(16,185,129,.55);} 50%,100% { background: #d8d8e4; box-shadow:none; } }
-  @keyframes p-busy { 0%,49.9% { background: var(--ok); box-shadow: 0 0 12px 2px rgba(16,185,129,.55);} 50%,100% { background: #d8d8e4; box-shadow:none; } }
-  /* 100 on, 150 off, 100 on, 1000 off */
-  @keyframes p-pass {
-    0%,7.4%    { background: var(--ok); box-shadow: 0 0 12px 2px rgba(16,185,129,.55); }
-    7.5%,18.4% { background: #d8d8e4; box-shadow:none; }
-    18.5%,25.8%{ background: var(--ok); box-shadow: 0 0 12px 2px rgba(16,185,129,.55); }
-    25.9%,100% { background: #d8d8e4; box-shadow:none; }
-  }
-  /* SOS: 150x5 / 450 · 450,150,450,150,450 / 450 · 150x5 / 1200 */
-  @keyframes p-fail {
-    0%,2.8%     { background: var(--err); box-shadow: 0 0 12px 2px rgba(239,68,68,.55); }
-    2.9%,5.6%   { background: #d8d8e4; box-shadow:none; }
-    5.7%,8.5%   { background: var(--err); box-shadow: 0 0 12px 2px rgba(239,68,68,.55); }
-    8.6%,11.3%  { background: #d8d8e4; box-shadow:none; }
-    11.4%,14.2% { background: var(--err); box-shadow: 0 0 12px 2px rgba(239,68,68,.55); }
-    14.3%,22.7% { background: #d8d8e4; box-shadow:none; }
-    22.8%,31.3% { background: var(--err); box-shadow: 0 0 12px 2px rgba(239,68,68,.55); }
-    31.4%,34.2% { background: #d8d8e4; box-shadow:none; }
-    34.3%,42.7% { background: var(--err); box-shadow: 0 0 12px 2px rgba(239,68,68,.55); }
-    42.8%,45.6% { background: #d8d8e4; box-shadow:none; }
-    45.7%,54.2% { background: var(--err); box-shadow: 0 0 12px 2px rgba(239,68,68,.55); }
-    54.3%,62.8% { background: #d8d8e4; box-shadow:none; }
-    62.9%,65.6% { background: var(--err); box-shadow: 0 0 12px 2px rgba(239,68,68,.55); }
-    65.7%,68.5% { background: #d8d8e4; box-shadow:none; }
-    68.6%,71.3% { background: var(--err); box-shadow: 0 0 12px 2px rgba(239,68,68,.55); }
-    71.4%,74.2% { background: #d8d8e4; box-shadow:none; }
-    74.3%,77.1% { background: var(--err); box-shadow: 0 0 12px 2px rgba(239,68,68,.55); }
-    77.2%,100%  { background: #d8d8e4; box-shadow:none; }
-  }
-  /* 800 on, 200 off, 100 on, 900 off */
-  @keyframes p-locked {
-    0%,39.9%   { background: var(--warn); box-shadow: 0 0 12px 2px rgba(245,158,11,.55); }
-    40%,49.9%  { background: #d8d8e4; box-shadow:none; }
-    50%,54.9%  { background: var(--warn); box-shadow: 0 0 12px 2px rgba(245,158,11,.55); }
-    55%,100%   { background: #d8d8e4; box-shadow:none; }
-  }
-  .led-desc b { display: block; }
-  .led-desc span { color: var(--muted); font-size: .9rem; }
   footer {
     margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line);
     color: var(--muted); font-size: .87rem; text-align: center;
@@ -161,7 +102,7 @@
 
 <header>
   <h1>F1Flash</h1>
-  <p class="tag">Máy nạp firmware STM32F1 — một cú bấm, bảy giây một board</p>
+  <p class="tag">Máy nạp firmware STM32F1 (SWD) &amp; LKS32MC083 / xe VinFast (UART)</p>
 </header>
 
 <div class="card" id="flasher">
@@ -207,58 +148,67 @@
       <td>flash <b>4 MB</b> — <a href="https://shopee.vn/Samirob-ESP32-C3-ESP32-S3-ESP32-H2-ESP32-C6-Ban-Ph%C3%A1t-Tri%E1%BB%83n-ESP32-C3-SuperMini-WiFi-Bluetooth-ESP32C3-B%E1%BA%A3ng-M%E1%BB%9F-R%E1%BB%99ng-i.578443443.24400570619?extraParams=%7B%22display_model_id%22%3A168039065133%2C%22model_selection_logic%22%3A3%7D" target="_blank" rel="noopener">mua trên Shopee</a><br>
       <span style="color:var(--muted);font-size:.86rem">Gian hàng bán nhiều dòng.
       Phải đúng <b>C3</b>; S3, C6, H2 không chạy firmware này.</span></td></tr>
-  <tr><td>Nút nhấn × 2</td><td>2 chân, thường hở</td></tr>
-  <tr><td>LED + trở 330 Ω × 2</td><td>trạng thái và kết quả</td></tr>
-  <tr><td>OLED 128×32</td><td>SSD1306, I2C, địa chỉ 0x3C — tuỳ chọn</td></tr>
-  <tr><td>Dây nối</td><td>3 sợi sang target: SWDIO, SWCLK, GND</td></tr>
+  <tr><td>Nút nhấn × 2</td><td>2 chân, thường hở — DI CHUYỂN và CHỌN</td></tr>
+  <tr><td><b>OLED 128×32</b></td><td>SSD1306, I2C, 0x3C — <b>bắt buộc</b> (là màn hình duy nhất)</td></tr>
+  <tr><td>Dây nối</td><td>3 sợi sang target: 2 chân tín hiệu + GND</td></tr>
 </table>
+
+<div class="note">
+  <b>Máy nạp được HAI loại target:</b> <b>STM32F103</b> qua SWD, và
+  <b>LKS32MC083</b> (bo điều khiển xe điện VinFast, dòng ZWK72xx) qua UART. Máy
+  tự chọn engine theo tiền tố tên firmware — không phải chọn tay. Mỗi lần chỉ
+  cắm MỘT loại dây.
+</div>
 
 
 <h2>2. Sơ đồ chân</h2>
 
+<p>Hai loại target dùng chung một đầu nối 3 chân, chỉ đổi vai:</p>
+
 <table>
-  <tr><th>Chân</th><th>Chức năng</th></tr>
-  <tr><td class="pin">GPIO 0</td><td>SWDIO → target</td></tr>
-  <tr><td class="pin">GPIO 2</td><td>SWCLK → target</td></tr>
-  <tr><td class="pin">GND</td><td>GND → target (bắt buộc)</td></tr>
-  <tr><td class="pin">GPIO 4</td><td>nút NẠP → GND</td></tr>
-  <tr><td class="pin">GPIO 7</td><td>nút XOÁ → GND</td></tr>
-  <tr><td class="pin">GPIO 8</td><td>OLED SDA</td></tr>
-  <tr><td class="pin">GPIO 9</td><td>OLED SCL</td></tr>
-  <tr><td class="pin">GPIO 5</td><td>LED trạng thái, qua trở 330 Ω xuống GND</td></tr>
-  <tr><td class="pin">GPIO 10</td><td>LED kết quả, qua trở 330 Ω xuống GND</td></tr>
+  <tr><th>Chân</th><th>STM32 (SWD)</th><th>LKS (UART, xe VinFast)</th></tr>
+  <tr><td class="pin">GPIO 0</td><td>SWDIO</td><td>RX (ESP ← target TX)</td></tr>
+  <tr><td class="pin">GPIO 2</td><td>SWCLK</td><td>TX (ESP → target RX)</td></tr>
+  <tr><td class="pin">GND</td><td colspan="2">GND → target (bắt buộc)</td></tr>
+  <tr><td class="pin">GPIO 4</td><td colspan="2">nút <b>DI CHUYỂN</b> → GND</td></tr>
+  <tr><td class="pin">GPIO 7</td><td colspan="2">nút <b>CHỌN</b> → GND</td></tr>
+  <tr><td class="pin">GPIO 8</td><td colspan="2">OLED SDA</td></tr>
+  <tr><td class="pin">GPIO 9</td><td colspan="2">OLED SCL</td></tr>
 </table>
 
-<pre>   ESP32-C3                        STM32F103
-   ┌─────────┐                     ┌─────────┐
-   │  GPIO 0 ├─────────────────────┤ SWDIO   │
-   │  GPIO 2 ├─────────────────────┤ SWCLK   │
-   │     GND ├─────────────────────┤ GND     │
-   │         │                     │ 3V3 ────┼── 3.3 V
-   │         │                     └─────────┘
-   │  GPIO 4 ├──[ nút NẠP ]── GND
-   │  GPIO 7 ├──[ nút XOÁ ]── GND
+<pre>   ESP32-C3                        Target (STM32 hoặc LKS)
+   ┌─────────┐                     ┌──────────────────────┐
+   │  GPIO 0 ├─────────────────────┤ SWDIO   / RX          │
+   │  GPIO 2 ├─────────────────────┤ SWCLK   / TX          │
+   │     GND ├─────────────────────┤ GND     (bắt buộc)    │
+   │         │                     │ 3V3 ────┼── 3.3 V     │
+   │         │                     └──────────────────────┘
+   │  GPIO 4 ├──[ nút DI CHUYỂN ]── GND
+   │  GPIO 7 ├──[ nút CHỌN ]────── GND
    │         │                     OLED 128×32
    │  GPIO 8 ├─────────────────────┤ SDA     │
    │  GPIO 9 ├─────────────────────┤ SCL     │
    │     3V3 ├─────────────────────┤ VCC     │
    │     GND ├─────────────────────┤ GND     │
-   │         │
-   │  GPIO 5 ├──[330Ω]──▶|── GND
-   │  GPIO 10├──[330Ω]──▶|── GND
    └─────────┘</pre>
 
 <table>
   <tr><th>Thông số</th><th></th></tr>
   <tr><td>Nguồn target</td><td>3.3 V. Không dùng 5 V.</td></tr>
-  <tr><td>nRESET</td><td>không đấu — dùng nút reset trên board target</td></tr>
+  <tr><td>nRESET</td><td>không đấu — STM32 dùng nút reset trên board; LKS vào bootloader bằng cách gõ cửa lúc vặn khoá xe</td></tr>
   <tr><td>Giao tiếp OLED</td><td>I2C 400 kHz, 0x3C</td></tr>
-  <tr><td>Khử rung nút</td><td>40 ms</td></tr>
-  <tr><td>Thời gian nạp</td><td>≈ 6,5 s cho ảnh 38 KB</td></tr>
+  <tr><td>Khử rung nút</td><td>100 ms</td></tr>
+  <tr><td>Thời gian nạp</td><td>STM32 ≈ 6,5 s (38 KB) · LKS ≈ 40 s (22 KB)</td></tr>
 </table>
 
 <div class="note bad">
-  <b>3.3 V.</b> 5 V làm lệch mức logic SWD, có thể hỏng chân ESP32-C3.
+  <b>Chỉ 3.3 V.</b> 5 V làm lệch mức logic, có thể hỏng chân ESP32-C3.
+</div>
+
+<div class="note bad">
+  <b>Nạp LKS phải dùng nguồn ổn định</b> (3.3 V trực tiếp / nguồn bàn) cho máy
+  nạp. Nếu cấp qua sạc, sạc tự nhả khi không thấy tải, target chớp tắt và không
+  nạp được.
 </div>
 
 <div class="note">
@@ -267,138 +217,101 @@
   này chạm mát lúc cấp nguồn.
 </div>
 
-<div class="note">
-  <b>Không gắn OLED vẫn chạy.</b> Khởi động không thấy 0x3C thì máy bỏ qua màn.
-  Thiếu GND sang target thì báo <code>No target responding</code>.
-</div>
 
+<h2>3. Màn hình OLED</h2>
 
-<h2>3. Đèn</h2>
+<p>Máy này <b>chỉ dùng OLED</b> để báo trạng thái — không còn đèn LED. Bật máy
+lên hiện màn nghỉ; <b>nhấn phím bất kỳ để vào menu</b>.</p>
 
-<p><b>LED trạng thái — GPIO 5.</b> Sáu trạng thái, phân biệt bằng hình dạng nhịp
-chứ không bằng tốc độ. Nhịp dưới đây chạy đúng tốc độ thật của máy.</p>
-
-<div class="card leds">
-  <div class="led-row">
-    <div class="lamp p-none"></div>
-    <div class="led-desc"><b>Chưa có firmware</b>
-      <span>Nháy đều 1 Hz</span></div>
-  </div>
-  <div class="led-row">
-    <div class="lamp on"></div>
-    <div class="led-desc"><b>Sẵn sàng</b>
-      <span>Sáng liên tục</span></div>
-  </div>
-  <div class="led-row">
-    <div class="lamp p-busy"></div>
-    <div class="led-desc"><b>Đang nạp</b>
-      <span>Chớp 10 Hz</span></div>
-  </div>
-  <div class="led-row">
-    <div class="lamp p-pass"></div>
-    <div class="led-desc"><b>Đạt</b>
-      <span>Nhịp tim — hai nhịp rồi nghỉ</span></div>
-  </div>
-  <div class="led-row">
-    <div class="lamp p-fail"></div>
-    <div class="led-desc"><b>Hỏng</b>
-      <span>SOS — thử lại</span></div>
-  </div>
-  <div class="led-row">
-    <div class="lamp p-locked"></div>
-    <div class="led-desc"><b>Chip khoá vĩnh viễn</b>
-      <span>Hải đăng — RDP mức 2, bỏ con đó</span></div>
-  </div>
-</div>
-
-<p><b>LED kết quả — GPIO 10.</b>
-sáng liên tục = đạt · chớp = hỏng · tắt = chưa có kết quả hoặc đang nạp.</p>
-
-
-<h2>4. Màn hình</h2>
-
-<p>Khung cố định: dòng nhỏ trên là bối cảnh, chữ to dưới là trạng thái.</p>
-
-<pre>   Lúc rảnh              Đang nạp
-   ┌────────────────────┐┌────────────────────┐
-   │38K a1b2c3     LOCK ││Flash 106/153       │
-   │────────────────────││▐███████████▌       │
-   │      READY         ││       68%          │
-   └────────────────────┘└────────────────────┘
-
-   Đạt                   Hỏng
-   ┌────────────────────┐┌────────────────────┐
-   │locked              ││ESP_ERR_TIMEOUT     │
-   │────────────────────││────────────────────│
-   │      PASS          ││      FAIL          │
-   └────────────────────┘└────────────────────┘</pre>
+<pre>   Màn nghỉ            Menu (tab FW)        Cửa sổ kết quả
+   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
+   │ 21K a1b2c3   │   │ FW 1/2       │   │ >> THANH CONG│
+   │──────────────│   │▐KLARA ECO45 ▌│   │              │
+   │    READY     │   │              │   │   [  OK  ]   │
+   └──────────────┘   └──────────────┘   └──────────────┘</pre>
 
 <table>
-  <tr><th>Thành phần</th><th>Nội dung</th></tr>
-  <tr><td>Chữ to</td><td><code>READY</code> · <code>EMPTY</code> ·
-      <code>PASS</code> · <code>FAIL</code> · phần trăm khi đang nạp</td></tr>
-  <tr><td>Dòng trên, lúc rảnh</td><td>dung lượng ảnh + 6 ký tự đầu của md5</td></tr>
-  <tr><td>Dòng trên, khi hỏng</td><td>mã lỗi</td></tr>
-  <tr><td><code>LOCK</code></td><td>máy đang bật khoá chống đọc cho target</td></tr>
-  <tr><td>Khởi động</td><td>logo rồi thanh chạy qua các bước, dưới 2 s</td></tr>
+  <tr><th>Điều khiển</th><th>Việc</th></tr>
+  <tr><td><b>DI CHUYỂN</b> (GPIO 4)</td><td>cuộn qua các mục (vòng)</td></tr>
+  <tr><td><b>CHỌN</b> (GPIO 7)</td><td>làm mục đang chọn</td></tr>
+  <tr><td><b>Cả hai nút cùng lúc</b></td><td>đổi tab: <b>FW</b> ↔ <b>Tools</b></td></tr>
 </table>
 
+<p>Hai tab: <b>FW</b> liệt kê firmware trong máy (tên hiển thị do người đặt);
+<b>Tools</b> có <code>Xoa STM32 (SWD)</code> và <code>Thong tin</code>.</p>
 
-<h2>5. Vận hành</h2>
+<p>Sau khi nạp, cửa sổ <code>THANH CONG</code> / <code>THAT BAI</code> + nút
+<code>[OK]</code> <b>giữ nguyên trên màn</b> — buông tay rồi nhấn phím bất kỳ mới
+quay về menu. Kết quả không tự biến mất.</p>
 
+
+<h2>4. Vận hành</h2>
+
+<h3>Nạp STM32F103 (SWD)</h3>
 <ol class="steps">
-  <li>Kẹp SWDIO, SWCLK, GND vào target. Cấp 3.3 V cho target.</li>
-  <li>Bấm nút <b>NẠP</b> (GPIO 4).</li>
-  <li>Chờ ≈ 7 s. Đèn chuyển sang nhịp tim hoặc SOS; màn hiện PASS hoặc FAIL.</li>
-  <li>Nhả ra, kẹp con kế tiếp.</li>
+  <li>Kẹp GPIO 0 (SWDIO), GPIO 2 (SWCLK), GND vào target. Cấp 3.3 V cho target.</li>
+  <li>Nhấn phím vào menu → chọn firmware <b>sw_…</b> ở tab FW → <b>CHỌN</b>.</li>
+  <li>Chờ ≈ 7 s, màn hiện <code>THANH CONG</code> hoặc <code>THAT BAI</code>.</li>
+  <li>Nhấn phím để về menu, kẹp con kế tiếp.</li>
 </ol>
 
-<p>Kết quả giữ trên màn và trên đèn cho tới lần bấm sau.</p>
+<h3>Nạp LKS32MC083 (xe VinFast, UART)</h3>
+<ol class="steps">
+  <li>Nối GPIO 2 → RX target, GPIO 0 → TX target, GND. Máy nạp dùng nguồn riêng.</li>
+  <li>Chọn firmware <b>lk_…</b> ở tab FW → <b>CHỌN</b>. Màn hiện <code>VAN KHOA XE</code>.</li>
+  <li><b>Bây giờ mới vặn khoá xe</b> — máy đang gõ cửa, bootloader vừa lên là dính ngay.</li>
+  <li>Chờ máy erase → ghi → verify → xong hiện <code>THANH CONG</code>.</li>
+</ol>
 
-<p><b>Xoá trắng target:</b> bấm nút <b>XOÁ</b> (GPIO 7).</p>
-
-<div class="note bad">
-  <b>Khi máy hiện <code>LOCK</code>:</b> nạp xong báo PASS thì phải rút điện
-  target rồi cấp lại, board mới chạy firmware mới. Nhấn reset không có tác dụng.
-  Đây là đặc tính của STM32F1 khi bật khoá đọc, không phải lỗi. Gỡ target ra khỏi
-  kẹp là đã mất điện nên thường không gặp.
+<div class="note">
+  <b>Máy tự bảo vệ bootloader của target LKS</b> và tự kiểm địa chỉ app: đọc mã
+  board trên chip, nếu lạ thì <b>bỏ nạp</b> và báo lỗi thay vì nạp mù. Nếu thấy
+  <code>APP_ADDR la</code> hoặc <code>BOOTLOADER LOI!</code> thì dừng, kiểm lại
+  dây và loại board.
 </div>
 
+<p><b>Xoá trắng STM32:</b> tab Tools → <code>Xoa STM32 (SWD)</code> → xác nhận
+Có/Không.</p>
 
-<h2>6. Đổi firmware máy đang mang</h2>
 
-<p>Máy nhớ đúng một firmware. Đổi bằng phần mềm <b>FlashPorter</b>
-(<code>F1Flash.exe</code>, chạy trực tiếp, không cần cài).</p>
+<h2>5. Đổi firmware máy đang mang</h2>
+
+<p>Máy chứa <b>nhiều firmware cùng lúc</b>. Quản lý bằng phần mềm <b>FlashPorter</b>
+trên PC (chạy trực tiếp, không cần cài).</p>
 
 <ol class="steps">
   <li>Cắm máy vào PC, mở phần mềm, chọn cổng COM (<em>USB Serial Device</em>).</li>
   <li>Máy mới: bấm <b>Run Self-Test</b> để kiểm bộ nhớ.</li>
-  <li>Chọn file <code>.bin</code> của STM32, bấm <b>Upload</b>.</li>
-  <li>Rút ra.</li>
+  <li>Ở mục <b>Firmware</b>: bấm <b>+ Thêm FW</b> cho từng file — nhập <b>tên hiển
+      thị</b> (hiện trên OLED), chọn <b>engine</b> (LKS08x hay STM32F1), chọn file
+      <code>.bin</code>.</li>
+  <li>Bấm <b>Ghi lên máy</b> — phần mềm đẩy hết firmware + danh sách vào máy.</li>
 </ol>
 
-<p>Phần mềm kiểm md5 và từ chối ảnh sai.</p>
+<p>Tên hiển thị và engine tách riêng: engine chọn theo loại target, tên chỉ để
+đọc trên màn cho dễ nhận.</p>
 
 
-<h2>7. Trục trặc</h2>
+<h2>6. Trục trặc</h2>
 
 <table>
   <tr><th>Hiện tượng</th><th>Nguyên nhân</th></tr>
-  <tr><td><code>No target responding</code></td>
+  <tr><td>OLED không hiện menu</td>
+      <td>chưa nhấn phím — bật máy vào màn nghỉ, nhấn phím bất kỳ để vào menu</td></tr>
+  <tr><td><code>No target responding</code> (STM32)</td>
       <td>thiếu GND, hoặc SWCLK không ở GPIO 2</td></tr>
-  <tr><td><code>Wrong chip</code></td>
-      <td>không phải STM32F1</td></tr>
-  <tr><td>Đèn hải đăng</td>
-      <td>target khoá RDP mức 2 — không tool nào nạp lại được</td></tr>
-  <tr><td>Đèn nháy chậm mãi</td>
-      <td>máy chưa có firmware</td></tr>
-  <tr><td>Nút không ăn</td>
-      <td>nút phải nối xuống GND, không nối lên 3V3</td></tr>
-  <tr><td><b>Báo PASS mà target nằm im</b></td>
-      <td>máy đang bật <code>LOCK</code> — rút điện target rồi cấp lại. Reset
-          không ăn. Target không hỏng.</td></tr>
+  <tr><td><code>APP_ADDR la</code> (LKS)</td>
+      <td>không đọc được mã board — sai loại chip, hoặc app đã bị xoá. Máy bỏ nạp cho an toàn</td></tr>
+  <tr><td><code>Het gio cho khoa</code> (LKS)</td>
+      <td>chờ quá lâu không thấy vặn khoá — kiểm dây TX/RX/GND, kiểm nguồn máy nạp</td></tr>
+  <tr><td><code>BOOTLOADER LOI!</code> (LKS)</td>
+      <td>lỗi nặng — dừng ngay, kiểm dây và loại board trước khi nạp con tiếp theo</td></tr>
+  <tr><td>Nút không ăn / loạn</td>
+      <td>nút phải nối xuống GND, không nối lên 3V3. Nút gợn thì thêm tụ 100 nF</td></tr>
+  <tr><td>Kết quả tự nhảy về menu</td>
+      <td>phải buông tay rồi mới nhấn lại — một cú nhấn giữ không tính là nhấn mới</td></tr>
   <tr><td>OLED không sáng</td>
-      <td>sai địa chỉ (phải 0x3C) hoặc đảo SDA/SCL. Máy vẫn nạp bình thường.</td></tr>
+      <td>sai địa chỉ (phải 0x3C) hoặc đảo SDA/SCL</td></tr>
   <tr><td>Cấp nguồn, máy không lên</td>
       <td>SDA hoặc SCL chạm mát lúc khởi động</td></tr>
   <tr><td>Trang này không nạp được</td>
@@ -408,7 +321,7 @@ sáng liên tục = đạt · chớp = hỏng · tắt = chưa có kết quả h
 
 
 <footer>
-  F1Flash — máy nạp STM32F1<br>
+  F1Flash — máy nạp STM32F1 (SWD) &amp; LKS32MC083 (UART)<br>
   Cần hỗ trợ hoặc firmware mới, liên hệ nơi bạn đã mua máy.<br>
   TTP27
 </footer>
